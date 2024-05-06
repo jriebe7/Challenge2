@@ -1,1 +1,85 @@
 # Challenge2
+
+Sub stocks()
+
+Dim ws As Worksheet
+
+For Each ws In ThisWorkbook.Worksheets
+ws.Activate
+
+Dim stock As String
+Dim total_volume As Double
+total_volume = 0
+Dim summary_table_row As Integer
+summary_table_row = 2
+Dim first_open As Double
+Dim last_close As Double
+Dim change As Double
+first_open = Cells(2, 3).Value
+
+Range("I1").Value = "Ticker"
+Range("J1").Value = "Quartely Change"
+Range("K1").Value = "Percent Change"
+Range("L1").Value = "Total Stock Volume"
+Range("O2").Value = "Greatest % Increase"
+Range("O3").Value = "Greatest % Decrease"
+Range("O4").Value = "Greatest Total Volume"
+Range("P1").Value = "Ticker"
+Range("Q1").Value = "Value"
+
+For i = 2 To 93001
+
+If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+
+stock = Cells(i, 1).Value
+Range("I" & summary_table_row).Value = stock
+
+total_volume = total_volume + Cells(i, 7).Value
+last_close = Cells(i, 6).Value
+Range("J" & summary_table_row).Value = last_close - first_open
+Range("K" & summary_table_row).NumberFormat = "0.00%"
+Range("K" & summary_table_row).Value = Range("J" & summary_table_row).Value / first_open
+Range("L" & summary_table_row).Value = total_volume
+
+If Range("J" & summary_table_row).Value < 0 Then
+Range("J" & summary_table_row).Interior.ColorIndex = 3
+ElseIf Range("J" & summary_table_row).Value > 0 Then
+Range("J" & summary_table_row).Interior.ColorIndex = 4
+End If
+
+
+summary_table_row = summary_table_row + 1
+
+total_volume = 0
+last_close = 0
+first_open = Cells(i + 1, 3).Value
+change = 0
+
+Else
+
+total_volume = total_volume + Cells(i, 7).Value
+
+
+End If
+
+Next i
+
+Range("Q2").NumberFormat = "0.00%"
+Range("Q2").Value = Application.WorksheetFunction.Max(Range("K:K"))
+Range("Q3").NumberFormat = "0.00%"
+Range("Q3").Value = Application.WorksheetFunction.Min(Range("K:K"))
+Range("Q4").Value = Application.WorksheetFunction.Max(Range("L:L"))
+
+For i = 2 To 93001
+If Cells(i, 11).Value = Application.WorksheetFunction.Max(Range("K:K")) Then
+Range("P2").Value = Cells(i, 9).Value
+ElseIf Cells(i, 11).Value = Application.WorksheetFunction.Min(Range("K:K")) Then
+Range("P3").Value = Cells(i, 9).Value
+ElseIf Cells(i, 12).Value = Application.WorksheetFunction.Max(Range("L:L")) Then
+Range("P4").Value = Cells(i, 9).Value
+End If
+Next i
+
+Next ws
+
+End Sub
