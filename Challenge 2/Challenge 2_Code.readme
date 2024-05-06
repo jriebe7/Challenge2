@@ -16,7 +16,7 @@ Dim change As Double
 first_open = Cells(2, 3).Value
 
 Range("I1").Value = "Ticker"
-Range("J1").Value = "Quartely Change"
+Range("J1").Value = "Quarterly Change"
 Range("K1").Value = "Percent Change"
 Range("L1").Value = "Total Stock Volume"
 Range("O2").Value = "Greatest % Increase"
